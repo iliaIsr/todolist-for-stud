@@ -24,12 +24,20 @@ function App() {
         setTasks(newTasks)
     }
 
+    const changeStatus=(taskId:string,isDone:boolean)=>{
+       let task=tasks.find(t=>t.id===taskId)
+       //нашли, записали в task
+        if(task){
+            task.isDone=isDone;
+        }
+        setTasks(tasks)//как task попадает в перерисовку?? find не мутаб
+    }
     function changeFilter(value:FilterValuesType){
-        setFilter(value)//value презаписывает знач filter?
+        setFilter(value)
     }
 
 
-        let tasksForTodolist=tasks;//ссылочный тип?
+        let tasksForTodolist=tasks;
         if(filter==="completed"){
             tasksForTodolist=tasks.filter(t=>t.isDone)
         }
@@ -48,6 +56,7 @@ function App() {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeTaskStatus={changeStatus}
 
       />
     </div>
