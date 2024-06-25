@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TasksType, Todolist} from "./Todolist";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 export type FilterValuesType = 'all' | "completed" | "active"
 
@@ -17,8 +18,9 @@ function App() {
     function removeTask(id: string, todolistId: string) {
         debugger
         let tasks = tasksObj[todolistId]
+
         let filteredTasks = tasks.filter(t => t.id !== id)
-        tasksObj[todolistId] = filteredTasks;
+        tasksObj[todolistId] = filteredTasks;//как сохранили tasksObj в начальном значении?
         setTasks({...tasksObj})//тут поменяли -запихнули
     }
 
@@ -34,15 +36,17 @@ function App() {
         let tasks = tasksObj[todolistId];
         let task = tasks.find(t => t.id === taskId)
         if (task)
-            task.isDone = isDone;//куда попадает task
-        setTasks({...tasksObj})//сетаем таскс но откуда там изменения
+            task.isDone = isDone;
+        setTasks({...tasksObj})
     }
+
+
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
         let todolist = todolists.find(tl => tl.id === todolistId);
         if (todolist) {
             todolist.filter = value;
-            setTodolists([...todolists])//сетаем тудулист, откуда знает про изменения
+            setTodolists([...todolists])
         }
     }
 
@@ -61,6 +65,7 @@ function App() {
         delete tasksObj[todolistId]
         setTasks({...tasksObj})
     }
+
     let [tasksObj, setTasks] = useState({
         [todolistId1]: [{id: v1(), title: "CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true},
@@ -74,6 +79,7 @@ function App() {
 
     return (
         <div className="App">
+            <AddItemForm addItem={(title:string)=>{alert(title)}}/>
             {
                 todolists.map((tl) => {
                     let tasksForTodolist = tasksObj[tl.id];
@@ -94,7 +100,6 @@ function App() {
                         changeTaskStatus={changeStatus}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
-
                     />
                 })
             }
@@ -104,3 +109,4 @@ function App() {
 }
 
 export default App;
+
